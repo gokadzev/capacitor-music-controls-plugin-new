@@ -21,7 +21,7 @@ PRs for rounding out issues and improving the plugin are welcome.
 ## Installation
 
 - Current release
-`npm install capacitor-music-controls-plugin`
+`npm install https://github.com/gokadzev/capacitor-music-controls-plugin-new.git`
 
 ## iOS
 
@@ -33,10 +33,33 @@ npx cap sync ios
 After you install the plugin, locate your MainActivity.java (can be found in /android/app/src/main/java/path/to/my/app/MainActivity.java)
 
 import this path:
+
 import com.ingageco.capacitormusiccontrols.CapacitorMusicControls;
 
 add class inside bridge activity:
 add(CapacitorMusicControls.class);
+
+example:
+
+import android.os.Bundle;
+
+import com.getcapacitor.BridgeActivity;
+import com.getcapacitor.Plugin;
+import com.ingageco.capacitormusiccontrols.CapacitorMusicControls;
+
+import java.util.ArrayList;
+
+public class MainActivity extends BridgeActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
+            add(CapacitorMusicControls.class);
+        }});
+    }
+}
+
 
 Finally, run:
 npx cap sync android
@@ -191,5 +214,5 @@ Documentation influenced by:
 ghenry22 (https://github.com/ghenry22)
 ghenry22 successor to Cordova Music Controls (https://github.com/ghenry22/cordova-plugin-music-controls2/)
 
-Special thanks to some forks with changes: 
-trabdin (https://github.com/trabdin)
+Project is cloned from: 
+wako-app (https://github.com/wako-app/capacitor-music-controls-plugin)
