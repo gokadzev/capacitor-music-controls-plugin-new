@@ -40,6 +40,7 @@ add class inside bridge activity:
 add(CapacitorMusicControls.class);
 
 example:
+```java
 
 import android.os.Bundle;
 
@@ -58,6 +59,7 @@ public class MainActivity extends BridgeActivity {
         }});
     }
 }
+```
 
 
 Finally, run:
