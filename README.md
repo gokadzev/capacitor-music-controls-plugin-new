@@ -62,6 +62,16 @@ public class MainActivity extends BridgeActivity {
 ```
 
 
+add to build.gradle :
+
+```java
+
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+```
+
+
 Finally, run:
 npx cap sync android
 
