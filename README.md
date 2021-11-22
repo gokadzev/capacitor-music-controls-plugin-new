@@ -28,7 +28,7 @@ PRs for rounding out issues and improving the plugin are welcome.
 Run:
 npx cap sync ios
 
-## Android (thanks @lbesiche)
+## Android
 
 After you install the plugin, locate your MainActivity.java (can be found in /android/app/src/main/java/path/to/my/app/MainActivity.java)
 
@@ -59,6 +59,16 @@ public class MainActivity extends BridgeActivity {
         }});
     }
 }
+```
+
+
+add to build.gradle :
+
+```java
+
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
 ```
 
 
