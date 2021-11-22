@@ -7,10 +7,8 @@ import java.io.InputStream;
 import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Random;
 
 import android.util.Log;
-import android.R;
 import android.content.Context;
 import android.app.Activity;
 
@@ -18,24 +16,27 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Build;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
 import android.app.NotificationChannel;
 
+import androidx.core.app.NotificationCompat;
+
 public class MusicControlsNotification {
 	private static final String TAG = "CMCNotification";
 
 	private Activity cordovaActivity;
 	private NotificationManager notificationManager;
-	private Notification.Builder notificationBuilder;
+	private NotificationCompat.Builder notificationBuilder;
 	private int notificationID;
 	private MusicControlsInfos infos;
 	private Bitmap bitmapCover;
 	private String CHANNEL_ID;
+	private MediaSessionCompat.Token mediaSession;
 
 	public WeakReference<CMCNotifyKiller> killer_service;
 
@@ -48,6 +49,8 @@ public class MusicControlsNotification {
 		this.cordovaActivity = cordovaActivity;
 		Context context = cordovaActivity.getApplicationContext();
 		this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		MediaSessionCompat mediaSession = new MediaSessionCompat(context, "session tag");
+		MediaSessionCompat.Token token = mediaSession.getSessionToken();
 
 		// use channelid for Oreo and higher
 		if (Build.VERSION.SDK_INT >= 26) {
@@ -197,7 +200,7 @@ public class MusicControlsNotification {
 
 	private void createBuilder(){
 		Context context = cordovaActivity.getApplicationContext();
-		Notification.Builder builder = new Notification.Builder(context);
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(context,CHANNEL_ID);
 
 		// use channelid for Oreo and higher
 		if (Build.VERSION.SDK_INT >= 26) {
@@ -228,7 +231,7 @@ public class MusicControlsNotification {
 
 		//If 5.0 >= set the controls to be visible on lockscreen
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
-			builder.setVisibility(Notification.VISIBILITY_PUBLIC);
+			builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 		}
 
 		//Set SmallIcon
@@ -268,34 +271,34 @@ public class MusicControlsNotification {
 			nbControls++;
 			Intent previousIntent = new Intent("music-controls-previous");
 			PendingIntent previousPendingIntent = PendingIntent.getBroadcast(context, 1, previousIntent, 0);
-			builder.addAction(this.getResourceId(this.infos.prevIcon, android.R.drawable.ic_media_previous), "", previousPendingIntent);
+			builder.addAction(createAction(this.infos.prevIcon, android.R.drawable.ic_media_previous, previousPendingIntent));
 		}
 		if (this.infos.isPlaying){
 			/* Pause  */
 			nbControls++;
 			Intent pauseIntent = new Intent("music-controls-pause");
 			PendingIntent pausePendingIntent = PendingIntent.getBroadcast(context, 1, pauseIntent, 0);
-			builder.addAction(this.getResourceId(this.infos.pauseIcon, android.R.drawable.ic_media_pause), "", pausePendingIntent);
+			builder.addAction(createAction(this.infos.pauseIcon, android.R.drawable.ic_media_pause, pausePendingIntent));
 		} else {
 			/* Play  */
 			nbControls++;
 			Intent playIntent = new Intent("music-controls-play");
 			PendingIntent playPendingIntent = PendingIntent.getBroadcast(context, 1, playIntent, 0);
-			builder.addAction(this.getResourceId(this.infos.playIcon, android.R.drawable.ic_media_play), "", playPendingIntent);
+			builder.addAction(createAction(this.infos.playIcon, android.R.drawable.ic_media_play, playPendingIntent));
 		}
 		/* Next */
 		if (this.infos.hasNext){
 			nbControls++;
 			Intent nextIntent = new Intent("music-controls-next");
 			PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context, 1, nextIntent, 0);
-			builder.addAction(this.getResourceId(this.infos.nextIcon, android.R.drawable.ic_media_next), "", nextPendingIntent);
+			builder.addAction(createAction(this.infos.nextIcon, android.R.drawable.ic_media_next, nextPendingIntent));
 		}
 		/* Close */
 		if (this.infos.hasClose){
 			nbControls++;
 			Intent destroyIntent = new Intent("music-controls-destroy");
 			PendingIntent destroyPendingIntent = PendingIntent.getBroadcast(context, 1, destroyIntent, 0);
-			builder.addAction(this.getResourceId(this.infos.closeIcon, android.R.drawable.ic_menu_close_clear_cancel), "", destroyPendingIntent);
+			builder.addAction(createAction(this.infos.closeIcon, android.R.drawable.ic_menu_close_clear_cancel, destroyPendingIntent));
 		}
 
 		//If 5.0 >= use MediaStyle
@@ -304,10 +307,23 @@ public class MusicControlsNotification {
 			for (int i = 0; i < nbControls; ++i) {
 				args[i] = i;
 			}
-			builder.setStyle(new Notification.MediaStyle().setShowActionsInCompactView(args));
+			builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession));
+			builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView(args));
 		}
+
+		//If 8.0 >= use colors
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			builder.setColorized(true);
+			builder.setColor(0xffff0000);  //default: red
+		}
+
 		this.notificationBuilder = builder;
 	}
+
+	private NotificationCompat.Action createAction(String drawableRes, int fallbackRes, PendingIntent intent) {
+        int icon = getResourceId(drawableRes, fallbackRes);
+        return new NotificationCompat.Action(icon, "", intent);
+    }
 
 	private int getResourceId(String name, int fallback){
 		try{
