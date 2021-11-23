@@ -23,6 +23,7 @@ public class MusicControlsInfos{
 	public String nextIcon;
 	public String closeIcon;
 	public String notificationIcon;
+	public int iconsColor;
 
 	public MusicControlsInfos(JSObject args) throws JSONException {
 		final JSObject params = args;
@@ -43,6 +44,7 @@ public class MusicControlsInfos{
 		this.nextIcon = params.getString("nextIcon");
 		this.closeIcon = params.getString("closeIcon");
 		this.notificationIcon = params.getString("notificationIcon");
+		this.iconsColor = params.getInteger("iconsColor");
 	}
 
 }

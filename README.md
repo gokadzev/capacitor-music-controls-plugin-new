@@ -123,7 +123,9 @@ CapacitorMusicControls.create({
 	prevIcon: 'media_prev',
 	nextIcon: 'media_next',
 	closeIcon: 'media_close',
-	notificationIcon: 'notification'
+	notificationIcon: 'notification',
+	iconsColor: 0xffffffff // controller icons color, default: white (url for more colors: https://developer.android.com/reference/android/graphics/Color#constants_1 ) 
+
 }).then(()=>{
 	// TODO
 })

@@ -24,6 +24,7 @@ export interface CapacitorMusicControlsInfo {
     nextIcon?: string;
     closeIcon?: string;
     notificationIcon?: string;
+    iconsColor?: number;
 }
 
 export interface CapacitorMusicControlsPlugin {
