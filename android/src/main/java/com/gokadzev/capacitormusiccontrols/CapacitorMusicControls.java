@@ -1,4 +1,4 @@
-package com.ingageco.capacitormusiccontrols;
+package com.gokadzev.capacitormusiccontrols;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.annotation.CapacitorPlugin;

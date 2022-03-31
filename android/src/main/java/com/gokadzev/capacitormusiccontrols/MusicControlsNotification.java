@@ -1,4 +1,4 @@
-package com.ingageco.capacitormusiccontrols;
+package com.gokadzev.capacitormusiccontrols;
 
 import java.lang.ref.WeakReference;
 import java.io.BufferedInputStream;
@@ -313,11 +313,9 @@ public class MusicControlsNotification {
 
 		//If 8.0 >= use colors
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			builder.setColorized(true);
-			if(this.infos.iconsColor){
+			if(this.infos.iconsColor != 0){
+				builder.setColorized(true);
 				builder.setColor(this.infos.iconsColor); 
-			} else {
-				builder.setColor(0xffffffff)
 			}
 		}
 

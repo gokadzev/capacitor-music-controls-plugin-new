@@ -34,7 +34,7 @@ After you install the plugin, locate your MainActivity.java (can be found in /an
 
 import this path:
 
-import com.ingageco.capacitormusiccontrols.CapacitorMusicControls;
+import com.gokadzev.capacitormusiccontrols.CapacitorMusicControls;
 
 add class inside bridge activity:
 add(CapacitorMusicControls.class);
@@ -46,7 +46,7 @@ import android.os.Bundle;
 
 import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Plugin;
-import com.ingageco.capacitormusiccontrols.CapacitorMusicControls;
+import com.gokadzev.capacitormusiccontrols.CapacitorMusicControls;
 
 import java.util.ArrayList;
 

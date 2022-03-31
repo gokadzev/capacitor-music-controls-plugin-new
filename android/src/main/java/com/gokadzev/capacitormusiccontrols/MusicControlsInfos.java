@@ -1,4 +1,4 @@
-package com.ingageco.capacitormusiccontrols;
+package com.gokadzev.capacitormusiccontrols;
 
 import com.getcapacitor.JSObject;
 
@@ -44,7 +44,7 @@ public class MusicControlsInfos{
 		this.nextIcon = params.getString("nextIcon");
 		this.closeIcon = params.getString("closeIcon");
 		this.notificationIcon = params.getString("notificationIcon");
-		this.iconsColor = params.getInteger("iconsColor");
+		this.iconsColor = params.getInteger("iconsColor", 0);
 	}
 
 }

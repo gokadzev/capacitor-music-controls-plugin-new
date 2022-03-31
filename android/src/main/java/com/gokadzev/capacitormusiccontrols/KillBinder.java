@@ -1,4 +1,4 @@
-package com.ingageco.capacitormusiccontrols;
+package com.gokadzev.capacitormusiccontrols;
 
 import android.app.Service;
 import android.os.Binder;
