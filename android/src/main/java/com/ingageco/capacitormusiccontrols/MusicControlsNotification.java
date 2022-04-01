@@ -307,7 +307,8 @@ public class MusicControlsNotification {
 			for (int i = 0; i < nbControls; ++i) {
 				args[i] = i;
 			}
-			builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession));
+			// setStyle(new NotificationCompat.DecoratedMediaCustomViewStyle().setMediaSession(mySession))
+			builder.setStyle(new androidx.media.app.NotificationCompat.DecoratedMediaCustomViewStyle().setMediaSession(mediaSession));
 			builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView(args));
 		}
 

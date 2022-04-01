@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 public class MusicControlsInfos{
 	public String artist;
-  	public String album;
+ 	public String album;
 	public String track;
 	public String ticker;
 	public String cover;
@@ -24,13 +24,14 @@ public class MusicControlsInfos{
 	public String closeIcon;
 	public String notificationIcon;
 	public int iconsColor;
+	public long duration;
 
 	public MusicControlsInfos(JSObject args) throws JSONException {
 		final JSObject params = args;
 		
 		this.track = params.getString("track");
 		this.artist = params.getString("artist");
-    	this.album = params.getString("album");
+  	this.album = params.getString("album");
 		this.ticker = params.getString("ticker");
 		this.cover = params.getString("cover");
 		this.isPlaying = params.getBoolean("isPlaying");
@@ -45,6 +46,7 @@ public class MusicControlsInfos{
 		this.closeIcon = params.getString("closeIcon");
 		this.notificationIcon = params.getString("notificationIcon");
 		this.iconsColor = params.getInteger("iconsColor");
+		this.duration = params.getLong("duration");
 	}
 
 }
