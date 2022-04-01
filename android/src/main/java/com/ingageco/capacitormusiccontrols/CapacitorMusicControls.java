@@ -63,14 +63,14 @@ public class CapacitorMusicControls extends Plugin {
 
 
 	@PluginMethod()
-    public void create(PluginCall call) {
-        JSObject options = call.getData();
+	public void create(PluginCall call) {
+		JSObject options = call.getData();
 
 
 		final Context context=getActivity().getApplicationContext();
 		final Activity activity = getActivity();
 
-        initialize();
+		initialize();
 
 
 		try{
@@ -113,7 +113,7 @@ public class CapacitorMusicControls extends Plugin {
 
 
 
-    }
+	}
 
 
 
@@ -275,7 +275,7 @@ public class CapacitorMusicControls extends Plugin {
 		try{
 			final boolean dismissable = params.getBoolean("dismissable");
 			this.notification.updateDismissable(dismissable);
-		call.resolve();
+			call.resolve();
 		} catch(JSONException e){
 			call.reject("error in updateDismissable");
 		}
@@ -291,7 +291,7 @@ public class CapacitorMusicControls extends Plugin {
 
 		notifyListeners("controlsNotification", ret);
 
-    }
+	}
 
 
 	private void registerBroadcaster(MusicControlsBroadcastReceiver mMessageReceiver){
@@ -335,9 +335,14 @@ public class CapacitorMusicControls extends Plugin {
 	private void setMediaPlaybackState(int state, long elapsed) {
 		PlaybackStateCompat.Builder playbackstateBuilder = new PlaybackStateCompat.Builder();
 		if( state == PlaybackStateCompat.STATE_PLAYING ) {
-			playbackstateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+			playbackstateBuilder.setActions(
+					PlaybackStateCompat.ACTION_PLAY_PAUSE |
+					PlaybackStateCompat.ACTION_PAUSE |
+					PlaybackStateCompat.ACTION_SKIP_TO_NEXT |
+					PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
 					PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID |
-					PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH);
+					PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH
+					);
 			playbackstateBuilder.setState(state, elapsed, 1.0f);
 		} else {
 			playbackstateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
