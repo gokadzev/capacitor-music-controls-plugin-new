@@ -36,7 +36,7 @@ public class MusicControlsNotification {
 	private MusicControlsInfos infos;
 	private Bitmap bitmapCover;
 	private String CHANNEL_ID;
-	private MediaSessionCompat.Token mediaSession;
+	private MediaSessionCompat.Token token;
 
 	public WeakReference<CMCNotifyKiller> killer_service;
 
@@ -50,7 +50,7 @@ public class MusicControlsNotification {
 		Context context = cordovaActivity.getApplicationContext();
 		this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		MediaSessionCompat mediaSession = new MediaSessionCompat(context, "session tag");
-		MediaSessionCompat.Token token = mediaSession.getSessionToken();
+		this.token = mediaSession.getSessionToken();
 
 		// use channelid for Oreo and higher
 		if (Build.VERSION.SDK_INT >= 26) {
@@ -68,7 +68,6 @@ public class MusicControlsNotification {
 
 			this.notificationManager.createNotificationChannel(mChannel);
     }
-
 	}
 
 	// Show or update notification
@@ -301,15 +300,15 @@ public class MusicControlsNotification {
 			builder.addAction(createAction(this.infos.closeIcon, android.R.drawable.ic_menu_close_clear_cancel, destroyPendingIntent));
 		}
 
-		//If 5.0 >= use MediaStyle
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
 			int[] args = new int[nbControls];
 			for (int i = 0; i < nbControls; ++i) {
 				args[i] = i;
 			}
-			// setStyle(new NotificationCompat.DecoratedMediaCustomViewStyle().setMediaSession(mySession))
-			builder.setStyle(new androidx.media.app.NotificationCompat.DecoratedMediaCustomViewStyle().setMediaSession(mediaSession));
-			builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView(args));
+			androidx.media.app.NotificationCompat.MediaStyle  mediaStyle = new androidx.media.app.NotificationCompat.MediaStyle();
+			mediaStyle.setMediaSession(this.token);
+			mediaStyle.setShowActionsInCompactView(args);
+			builder.setStyle(mediaStyle);
 		}
 
 		//If 8.0 >= use colors
