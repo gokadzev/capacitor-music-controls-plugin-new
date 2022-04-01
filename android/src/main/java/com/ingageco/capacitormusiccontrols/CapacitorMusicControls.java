@@ -95,7 +95,7 @@ public class CapacitorMusicControls extends Plugin {
 
 			}
 
-			metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, 10000);
+			metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, infos.duration);
 			mediaSessionCompat.setMetadata(metadataBuilder.build());
 
 			if(infos.isPlaying)
