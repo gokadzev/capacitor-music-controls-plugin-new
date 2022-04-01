@@ -73,11 +73,8 @@ public class CapacitorMusicControls extends Plugin {
 
 			this.notification.updateNotification(infos);
 
-			// track title
 			metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, infos.track);
-			// artists
 			metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, infos.artist);
-			//album
 			metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, infos.album);
 
 			Bitmap art = getBitmapCover(infos.cover);
@@ -95,6 +92,8 @@ public class CapacitorMusicControls extends Plugin {
 			else
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, 0);
 
+			this.mediaSessionCompat.setActive(true);
+
 			call.resolve();
 		} catch(JSONException e) {
 			call.reject("error in initializing MusicControlsInfos "+e.toString());
@@ -111,9 +110,7 @@ public class CapacitorMusicControls extends Plugin {
 
 		this.notification = new MusicControlsNotification(activity, this.notificationID);
 
-
 		final MusicControlsNotification my_notification = this.notification;
-
 
 		this.mMessageReceiver = new MusicControlsBroadcastReceiver(this);
 		registerBroadcaster(this.mMessageReceiver);
@@ -131,7 +128,6 @@ public class CapacitorMusicControls extends Plugin {
 
 
 		setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, 0);
-		this.mediaSessionCompat.setActive(true);
 
 		mMediaSessionCallback = new MediaSessionCallback(this);
 
@@ -201,12 +197,22 @@ public class CapacitorMusicControls extends Plugin {
 			activity.stopService(stopServiceIntent);
 			mConnection = null;
 		}
+
+		this.mediaSessionCompat.setActive(false);
+		this.mediaSessionCompat.setMetadata(null);
+		this.mediaSessionCompat.setPlaybackState(null);
+
+		this.mMessageReceiver = null;
+		this.notification = null;
+		this.mediaSessionCompat = null;
+		this.mAudioManager = null;
+		this.mediaButtonPendingIntent = null;
+		this.mediaButtonAccess = true;
+		this.mConnection = null;
+		this.mMediaSessionCallback = null;
+
 		call.resolve();
 	}
-
-
-
-
 
 	@PluginMethod()
 	public void updateIsPlaying(PluginCall call) {
@@ -231,9 +237,6 @@ public class CapacitorMusicControls extends Plugin {
 			e.printStackTrace();
 			call.reject("error in updateIsPlaying");
 		}
-
-
-
 	}
 
 	@PluginMethod()
@@ -257,7 +260,6 @@ public class CapacitorMusicControls extends Plugin {
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@PluginMethod()
@@ -271,11 +273,7 @@ public class CapacitorMusicControls extends Plugin {
 		} catch(JSONException e){
 			call.reject("error in updateDismissable");
 		}
-
 	}
-
-
-
 
 	public void controlsNotification(JSObject ret){
 
@@ -284,7 +282,6 @@ public class CapacitorMusicControls extends Plugin {
 		notifyListeners("controlsNotification", ret);
 
 	}
-
 
 	private void registerBroadcaster(MusicControlsBroadcastReceiver mMessageReceiver){
 		final Context context = getActivity().getApplicationContext();
@@ -322,7 +319,6 @@ public class CapacitorMusicControls extends Plugin {
 			}
 		}
 	}
-
 
 	private void setMediaPlaybackState(int state, long elapsed) {
 		PlaybackStateCompat.Builder playbackstateBuilder = new PlaybackStateCompat.Builder();

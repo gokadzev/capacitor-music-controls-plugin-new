@@ -313,7 +313,7 @@ public class MusicControlsNotification {
 
 		//If 8.0 >= use colors
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			if(this.infos.iconsColor != 0){
+			if(this.infos.iconsColor != -1){
 				builder.setColorized(true);
 				builder.setColor(this.infos.iconsColor); 
 			}
