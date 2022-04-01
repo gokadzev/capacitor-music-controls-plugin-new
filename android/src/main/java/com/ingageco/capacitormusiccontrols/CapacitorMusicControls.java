@@ -56,30 +56,22 @@ public class CapacitorMusicControls extends Plugin {
 	private boolean mediaButtonAccess=true;
 	private ServiceConnection mConnection;
 
-
 	private MediaSessionCallback mMediaSessionCallback;
-
-
-
 
 	@PluginMethod()
 	public void create(PluginCall call) {
 		JSObject options = call.getData();
-
 
 		final Context context=getActivity().getApplicationContext();
 		final Activity activity = getActivity();
 
 		initialize();
 
-
 		try{
 			final MusicControlsInfos infos = new MusicControlsInfos(options);
-
 			final MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
 
-
-			notification.updateNotification(infos);
+			this.notification.updateNotification(infos);
 
 			// track title
 			metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, infos.track);
@@ -96,7 +88,7 @@ public class CapacitorMusicControls extends Plugin {
 			}
 
 			metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, infos.duration);
-			mediaSessionCompat.setMetadata(metadataBuilder.build());
+			this.mediaSessionCompat.setMetadata(metadataBuilder.build());
 
 			if(infos.isPlaying)
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, 0);
@@ -104,15 +96,9 @@ public class CapacitorMusicControls extends Plugin {
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, 0);
 
 			call.resolve();
-
-		}catch(JSONException e){
+		} catch(JSONException e) {
 			call.reject("error in initializing MusicControlsInfos "+e.toString());
-
 		}
-
-
-
-
 	}
 
 
@@ -123,36 +109,42 @@ public class CapacitorMusicControls extends Plugin {
 
 		final Context context=activity.getApplicationContext();
 
-		notification = new MusicControlsNotification(activity, notificationID);
+		this.notification = new MusicControlsNotification(activity, this.notificationID);
 
 
-		final MusicControlsNotification my_notification = notification;
+		final MusicControlsNotification my_notification = this.notification;
 
 
-		mMessageReceiver = new MusicControlsBroadcastReceiver(this);
-		registerBroadcaster(mMessageReceiver);
+		this.mMessageReceiver = new MusicControlsBroadcastReceiver(this);
+		registerBroadcaster(this.mMessageReceiver);
 
+		try {
+			this.mAudioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+			Intent headsetIntent = new Intent("music-controls-media-button");
+			this.mediaButtonPendingIntent = PendingIntent.getBroadcast(context, 0, headsetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		} catch (Exception e) {
+			this.mediaButtonAccess = false;
+		}
 
-		mediaSessionCompat = new MediaSessionCompat(context, "capacitor-music-controls-media-session", null, mediaButtonPendingIntent);
-		mediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+		this.mediaSessionCompat = new MediaSessionCompat(context, "capacitor-music-controls-media-session", null, this.mediaButtonPendingIntent);
+		this.mediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
 
 		setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, 0);
-		mediaSessionCompat.setActive(true);
+		this.mediaSessionCompat.setActive(true);
 
 		mMediaSessionCallback = new MediaSessionCallback(this);
 
-		mediaSessionCompat.setCallback(mMediaSessionCallback);
+		this.mediaSessionCompat.setCallback(mMediaSessionCallback);
 
 		// Register media (headset) button event receiver
-		try {
-			mAudioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-			Intent headsetIntent = new Intent("music-controls-media-button");
-			mediaButtonPendingIntent = PendingIntent.getBroadcast(context, 0, headsetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			registerMediaButtonEvent();
-		} catch (Exception e) {
-			mediaButtonAccess=false;
-			e.printStackTrace();
+		if (this.mediaButtonAccess) {
+			try {
+				registerMediaButtonEvent();
+			} catch (Exception e) {
+				this.mediaButtonAccess=false;
+				e.printStackTrace();
+			}
 		}
 
 
@@ -174,7 +166,7 @@ public class CapacitorMusicControls extends Plugin {
 
 
 		Intent startServiceIntent = new Intent(activity,CMCNotifyKiller.class);
-		startServiceIntent.putExtra("notificationID", notificationID);
+		startServiceIntent.putExtra("notificationID", this.notificationID);
 		activity.bindService(startServiceIntent, newMConnection, Context.BIND_AUTO_CREATE);
 
 		mConnection = newMConnection;
@@ -193,7 +185,7 @@ public class CapacitorMusicControls extends Plugin {
 
 		try{
 
-			context.unregisterReceiver(mMessageReceiver);
+			context.unregisterReceiver(this.mMessageReceiver);
 
 		} catch(IllegalArgumentException e) {
 
@@ -345,7 +337,8 @@ public class CapacitorMusicControls extends Plugin {
 					);
 			playbackstateBuilder.setState(state, elapsed, 1.0f);
 		} else {
-			playbackstateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE |
+			playbackstateBuilder.setActions(
+					PlaybackStateCompat.ACTION_PLAY_PAUSE |
 					PlaybackStateCompat.ACTION_PLAY |
 					PlaybackStateCompat.ACTION_SKIP_TO_NEXT |
 					PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
