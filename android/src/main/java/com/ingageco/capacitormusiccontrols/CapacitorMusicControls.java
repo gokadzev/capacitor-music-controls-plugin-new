@@ -99,9 +99,9 @@ public class CapacitorMusicControls extends Plugin {
 			mediaSessionCompat.setMetadata(metadataBuilder.build());
 
 			if(infos.isPlaying)
-				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, 0, 1.0f);
+				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, 0);
 			else
-				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, 0, 0);
+				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, 0);
 
 			call.resolve();
 
