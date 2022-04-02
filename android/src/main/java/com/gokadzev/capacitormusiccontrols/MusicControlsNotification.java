@@ -36,12 +36,12 @@ public class MusicControlsNotification {
 	private MusicControlsInfos infos;
 	private Bitmap bitmapCover;
 	private String CHANNEL_ID;
-	private MediaSessionCompat.Token mediaSession;
+	private MediaSessionCompat.Token token;
 
 	public WeakReference<CMCNotifyKiller> killer_service;
 
 	// Public Constructor
-	public MusicControlsNotification(Activity cordovaActivity,int id){
+	public MusicControlsNotification(Activity cordovaActivity,int id, MediaSessionCompat.Token token){
 
 
 		this.CHANNEL_ID ="capacitor-music-channel-id";
@@ -49,8 +49,8 @@ public class MusicControlsNotification {
 		this.cordovaActivity = cordovaActivity;
 		Context context = cordovaActivity.getApplicationContext();
 		this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		MediaSessionCompat mediaSession = new MediaSessionCompat(context, "session tag");
-		MediaSessionCompat.Token token = mediaSession.getSessionToken();
+		//MediaSessionCompat mediaSession = new MediaSessionCompat(context, "session tag");
+		this.token = token; //mediaSession.getSessionToken();
 
 		// use channelid for Oreo and higher
 		if (Build.VERSION.SDK_INT >= 26) {
@@ -68,17 +68,13 @@ public class MusicControlsNotification {
 
 			this.notificationManager.createNotificationChannel(mChannel);
     }
-
 	}
 
 	// Show or update notification
 	public void updateNotification(MusicControlsInfos newInfos){
 
 		Log.i(TAG, "updateNotification: infos: " + newInfos.toString());
-		// Check if the cover has changed
-		if (!newInfos.cover.isEmpty() && (this.infos == null || !newInfos.cover.equals(this.infos.cover))){
-			this.getBitmapCover(newInfos.cover);
-		}
+		this.getBitmapCover(newInfos.cover);
 		this.infos = newInfos;
 		this.createBuilder();
 		this.createNotification();
@@ -102,21 +98,11 @@ public class MusicControlsNotification {
 
 	// Toggle the play/pause button
 	public void updateIsPlaying(boolean isPlaying) {
-
-		Log.i(TAG, "updateIsPlaying: isPlaying: " + isPlaying);
-
-
 		if (isPlaying == this.infos.isPlaying && this.hasNotification()) {
 			return;  // Not recreate the notification with the same data
 		}
 
-		Log.i(TAG, "updateIsPlaying: pre:this.infos.isPlaying: " + this.infos.isPlaying);
-
 		this.infos.isPlaying=isPlaying;
-
-
-		Log.i(TAG, "updateIsPlaying: post:this.infos.isPlaying: " + this.infos.isPlaying);
-
 		this.createBuilder();
 		this.createNotification();
 	}
@@ -301,14 +287,15 @@ public class MusicControlsNotification {
 			builder.addAction(createAction(this.infos.closeIcon, android.R.drawable.ic_menu_close_clear_cancel, destroyPendingIntent));
 		}
 
-		//If 5.0 >= use MediaStyle
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
 			int[] args = new int[nbControls];
 			for (int i = 0; i < nbControls; ++i) {
 				args[i] = i;
 			}
-			builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession));
-			builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView(args));
+			androidx.media.app.NotificationCompat.MediaStyle  mediaStyle = new androidx.media.app.NotificationCompat.MediaStyle();
+			mediaStyle.setMediaSession(this.token);
+			mediaStyle.setShowActionsInCompactView(args);
+			builder.setStyle(mediaStyle);
 		}
 
 		//If 8.0 >= use colors
