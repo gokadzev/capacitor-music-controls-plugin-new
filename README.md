@@ -225,7 +225,9 @@ homerours (https://github.com/homerours)
 
 Documentation influenced by:
 ghenry22 (https://github.com/ghenry22)
-ghenry22 successor to Cordova Music Controls (https://github.com/ghenry22/cordova-plugin-music-controls2/)
 
-Project is cloned from: 
-wako-app (https://github.com/wako-app/capacitor-music-controls-plugin)
+Contributors: 
+
+<a href = "https://github.com/gokadzev/capacitor-music-controls-plugin-new/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=gokadzev/capacitor-music-controls-plugin-new"/>
+</a>
