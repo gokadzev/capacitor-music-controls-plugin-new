@@ -41,7 +41,7 @@ public class MusicControlsNotification {
 	public WeakReference<CMCNotifyKiller> killer_service;
 
 	// Public Constructor
-	public MusicControlsNotification(Activity cordovaActivity,int id){
+	public MusicControlsNotification(Activity cordovaActivity,int id, MediaSessionCompat.Token token){
 
 
 		this.CHANNEL_ID ="capacitor-music-channel-id";
@@ -49,8 +49,8 @@ public class MusicControlsNotification {
 		this.cordovaActivity = cordovaActivity;
 		Context context = cordovaActivity.getApplicationContext();
 		this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		MediaSessionCompat mediaSession = new MediaSessionCompat(context, "session tag");
-		this.token = mediaSession.getSessionToken();
+		//MediaSessionCompat mediaSession = new MediaSessionCompat(context, "session tag");
+		this.token = token; //mediaSession.getSessionToken();
 
 		// use channelid for Oreo and higher
 		if (Build.VERSION.SDK_INT >= 26) {
@@ -74,10 +74,7 @@ public class MusicControlsNotification {
 	public void updateNotification(MusicControlsInfos newInfos){
 
 		Log.i(TAG, "updateNotification: infos: " + newInfos.toString());
-		// Check if the cover has changed
-		if (!newInfos.cover.isEmpty() && (this.infos == null || !newInfos.cover.equals(this.infos.cover))){
-			this.getBitmapCover(newInfos.cover);
-		}
+		this.getBitmapCover(newInfos.cover);
 		this.infos = newInfos;
 		this.createBuilder();
 		this.createNotification();
@@ -101,21 +98,11 @@ public class MusicControlsNotification {
 
 	// Toggle the play/pause button
 	public void updateIsPlaying(boolean isPlaying) {
-
-		Log.i(TAG, "updateIsPlaying: isPlaying: " + isPlaying);
-
-
 		if (isPlaying == this.infos.isPlaying && this.hasNotification()) {
 			return;  // Not recreate the notification with the same data
 		}
 
-		Log.i(TAG, "updateIsPlaying: pre:this.infos.isPlaying: " + this.infos.isPlaying);
-
 		this.infos.isPlaying=isPlaying;
-
-
-		Log.i(TAG, "updateIsPlaying: post:this.infos.isPlaying: " + this.infos.isPlaying);
-
 		this.createBuilder();
 		this.createNotification();
 	}
