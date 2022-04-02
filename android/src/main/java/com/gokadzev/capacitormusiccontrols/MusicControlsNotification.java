@@ -1,5 +1,7 @@
 package com.gokadzev.capacitormusiccontrols;
 
+import com.gokadzev.capacitormusiccontrols.capacitormusiccontrolsplugin.R;
+
 import java.lang.ref.WeakReference;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -232,9 +234,9 @@ public class MusicControlsNotification {
 
 		if(usePlayingIcon){
 			if (this.infos.isPlaying){
-				builder.setSmallIcon(this.getResourceId(this.infos.playIcon, android.R.drawable.ic_media_play));
+				builder.setSmallIcon(this.getResourceId(this.infos.playIcon, R.drawable.cmc_play));
 			} else {
-				builder.setSmallIcon(this.getResourceId(this.infos.pauseIcon, android.R.drawable.ic_media_pause));
+				builder.setSmallIcon(this.getResourceId(this.infos.pauseIcon, R.drawable.cmc_pause));
 			}
 		}
 
@@ -257,34 +259,34 @@ public class MusicControlsNotification {
 			nbControls++;
 			Intent previousIntent = new Intent("music-controls-previous");
 			PendingIntent previousPendingIntent = PendingIntent.getBroadcast(context, 1, previousIntent, 0);
-			builder.addAction(createAction(this.infos.prevIcon, android.R.drawable.ic_media_previous, previousPendingIntent));
+			builder.addAction(createAction(this.infos.prevIcon, R.drawable.cmc_skip_previous, previousPendingIntent));
 		}
 		if (this.infos.isPlaying){
 			/* Pause  */
 			nbControls++;
 			Intent pauseIntent = new Intent("music-controls-pause");
 			PendingIntent pausePendingIntent = PendingIntent.getBroadcast(context, 1, pauseIntent, 0);
-			builder.addAction(createAction(this.infos.pauseIcon, android.R.drawable.ic_media_pause, pausePendingIntent));
+			builder.addAction(createAction(this.infos.pauseIcon, R.drawable.cmc_pause, pausePendingIntent));
 		} else {
 			/* Play  */
 			nbControls++;
 			Intent playIntent = new Intent("music-controls-play");
 			PendingIntent playPendingIntent = PendingIntent.getBroadcast(context, 1, playIntent, 0);
-			builder.addAction(createAction(this.infos.playIcon, android.R.drawable.ic_media_play, playPendingIntent));
+			builder.addAction(createAction(this.infos.playIcon, R.drawable.cmc_play, playPendingIntent));
 		}
 		/* Next */
 		if (this.infos.hasNext){
 			nbControls++;
 			Intent nextIntent = new Intent("music-controls-next");
 			PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context, 1, nextIntent, 0);
-			builder.addAction(createAction(this.infos.nextIcon, android.R.drawable.ic_media_next, nextPendingIntent));
+			builder.addAction(createAction(this.infos.nextIcon, R.drawable.cmc_skip_next, nextPendingIntent));
 		}
 		/* Close */
 		if (this.infos.hasClose){
 			nbControls++;
 			Intent destroyIntent = new Intent("music-controls-destroy");
 			PendingIntent destroyPendingIntent = PendingIntent.getBroadcast(context, 1, destroyIntent, 0);
-			builder.addAction(createAction(this.infos.closeIcon, android.R.drawable.ic_menu_close_clear_cancel, destroyPendingIntent));
+			builder.addAction(createAction(this.infos.closeIcon, R.drawable.cmc_stop, destroyPendingIntent));
 		}
 
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
