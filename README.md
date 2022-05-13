@@ -147,7 +147,7 @@ CapacitorMusicControls.updateIsPlaying(true).then(()=>{
 
 CapacitorMusicControls.updateElapsed({
 	elapsed: timeElapsed, // affects iOS Only
-    isPlaying: true // affects Android only
+	isPlaying: true // affects Android only
 }).then(()=>{
 	// TODO
 })
