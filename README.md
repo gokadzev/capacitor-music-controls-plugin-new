@@ -4,9 +4,6 @@ An update to Cordova Music Controls plugin to support Capacitor 3
 
 Music controls for Capacitor applications. Display a 'media' notification with play/pause, previous, next buttons, allowing the user to control the play. Handles headset events (plug, unplug, headset button) on Android.
 
-This plugin is forked from the original Cordova plugin which is no longer maintained but which can be found at:
-https://github.com/homerours/cordova-music-controls-plugin
-
 ##  work in progress
 
 this integration is a work in progress. currently, most controls work as expected. there are some questions around supplying images on iOS.
@@ -81,8 +78,7 @@ npx cap sync android
 At the top of your file import Capacitor Plugins and this extract this plugin
 
 ```javascript
-import { Plugins } from '@capacitor/core';
-const { CapacitorMusicControls } = Plugins;
+import { CapacitorMusicControls } from "capacitor-music-controls-plugin";
 ```
 
 ## Methods
@@ -137,15 +133,28 @@ CapacitorMusicControls.create({
 - Update whether the music is playing true/false, as well as the time elapsed (seconds)
 
 ```javascript
-CapacitorMusicControls.updateIsPlaying({
-    isPlaying: true, // affects Android only
-    elapsed: timeElapsed // affects iOS Only
+
+//Update only playing status
+
+CapacitorMusicControls.updateIsPlaying(true).then(()=>{
+	// TODO
+})
+.catch(e=>{
+	console.log(e);
+});
+
+//Update as playing status as elapsed time
+
+CapacitorMusicControls.updateElapsed({
+	elapsed: timeElapsed, // affects iOS Only
+    isPlaying: true // affects Android only
 }).then(()=>{
 	// TODO
 })
 .catch(e=>{
 	console.log(e);
 });
+
 ```
 
 - Listen for events and pass them to your handler function
@@ -221,7 +230,7 @@ function handleControlsEvent(action) {
 ## credits & contributions
 
 Original plugin by:
-homerours (https://github.com/homerours)
+wako-app (https://github.com/wako-app/)
 
 Documentation influenced by:
 ghenry22 (https://github.com/ghenry22)
