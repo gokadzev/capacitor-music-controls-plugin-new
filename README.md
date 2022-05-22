@@ -93,8 +93,11 @@ CapacitorMusicControls.create({
 	hasNext   : false,		// show next button, optional, default: true
 	hasClose  : true,		// show close button, optional, default: false
 
+
+	duration : 0, // required
+
+
 	// iOS only, optional
-	duration : 60, // optional, default: 0
 	elapsed : 10, // optional, default: 0
   	hasSkipForward : true, //optional, default: false. true value overrides hasNext.
   	hasSkipBackward : true, //optional, default: false. true value overrides hasPrev.
