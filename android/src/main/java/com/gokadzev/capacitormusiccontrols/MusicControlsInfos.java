@@ -2,13 +2,11 @@ package com.gokadzev.capacitormusiccontrols;
 
 import com.getcapacitor.JSObject;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MusicControlsInfos{
 	public String artist;
- 	public String album;
+	public String album;
 	public String track;
 	public String ticker;
 	public String cover;
@@ -28,23 +26,23 @@ public class MusicControlsInfos{
 
 	public MusicControlsInfos(JSObject args) throws JSONException {
 		final JSObject params = args;
-		
-		this.track = params.getString("track");
-		this.artist = params.getString("artist");
-  	this.album = params.getString("album");
-		this.ticker = params.getString("ticker");
-		this.cover = params.getString("cover");
-		this.isPlaying = params.getBoolean("isPlaying");
-		this.hasPrev = params.getBoolean("hasPrev");
-		this.hasNext = params.getBoolean("hasNext");
-		this.hasClose = params.getBoolean("hasClose");
-		this.dismissable = params.getBoolean("dismissable");
-		this.playIcon = params.getString("playIcon");
-		this.pauseIcon = params.getString("pauseIcon");
-		this.prevIcon = params.getString("prevIcon");
-		this.nextIcon = params.getString("nextIcon");
-		this.closeIcon = params.getString("closeIcon");
-		this.notificationIcon = params.getString("notificationIcon");
+
+		this.track = params.getString("track", "");
+		this.artist = params.getString("artist", "");
+		this.album = params.getString("album", "");
+		this.ticker = params.getString("ticker", "");
+		this.cover = params.getString("cover", "");
+		this.isPlaying = params.getBoolean("isPlaying", false);
+		this.hasPrev = params.getBoolean("hasPrev", true);
+		this.hasNext = params.getBoolean("hasNext", true);
+		this.hasClose = params.getBoolean("hasClose", false);
+		this.dismissable = params.getBoolean("dismissable", false);
+		this.playIcon = params.getString("playIcon", "media_play");
+		this.pauseIcon = params.getString("pauseIcon", "media_pause");
+		this.prevIcon = params.getString("prevIcon", "media_prev");
+		this.nextIcon = params.getString("nextIcon", "media_next");
+		this.closeIcon = params.getString("closeIcon", "media_close");
+		this.notificationIcon = params.getString("notificationIcon", "notification");
 		this.iconsColor = params.getInteger("iconsColor", 0);
 		this.duration = params.getLong("duration");
 	}
