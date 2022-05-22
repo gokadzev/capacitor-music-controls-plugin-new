@@ -7,14 +7,11 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
-import android.util.Log;
 import android.app.Activity;
 
 import android.os.SystemClock;
@@ -23,25 +20,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.content.Intent;
 import android.app.PendingIntent;
-import android.content.ServiceConnection;
-import android.content.ComponentName;
-import android.app.Service;
-import android.os.IBinder;
-import android.os.Bundle;
-import android.os.Build;
-import android.R;
-import android.content.BroadcastReceiver;
-import android.media.AudioManager;
-
-import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 @CapacitorPlugin(name = "CapacitorMusicControls")
 public class CapacitorMusicControls extends Plugin {

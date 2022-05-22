@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.os.Binder;
 import android.os.PowerManager;
 import android.app.NotificationManager;
 import android.app.Notification;

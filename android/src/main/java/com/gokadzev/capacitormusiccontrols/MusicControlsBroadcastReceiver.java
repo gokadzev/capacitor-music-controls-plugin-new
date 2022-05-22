@@ -4,10 +4,8 @@ package com.gokadzev.capacitormusiccontrols;
 import com.getcapacitor.JSObject;
 
 import android.util.Log;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.content.BroadcastReceiver;
 import android.view.KeyEvent;
 
