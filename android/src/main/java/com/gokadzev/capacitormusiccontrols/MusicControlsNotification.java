@@ -206,7 +206,13 @@ public class MusicControlsNotification {
 		if (this.infos.dismissable){
 			builder.setOngoing(false);
 			Intent dismissIntent = new Intent("music-controls-destroy");
-			PendingIntent dismissPendingIntent = PendingIntent.getBroadcast(context, 1, dismissIntent, 0);
+			PendingIntent dismissPendingIntent;
+			if (Build.VERSION.SDK_INT >= 23) {
+				dismissPendingIntent = PendingIntent.getBroadcast(context, 1, dismissIntent, PendingIntent.FLAG_IMMUTABLE);
+			} else {
+				dismissPendingIntent = PendingIntent.getBroadcast(context, 1, dismissIntent, 0);
+			}
+
 			builder.setDeleteIntent(dismissPendingIntent);
 		} else {
 			builder.setOngoing(true);
@@ -216,11 +222,7 @@ public class MusicControlsNotification {
 		}
 		
 		builder.setPriority(Notification.PRIORITY_MAX);
-
-		//If 5.0 >= set the controls to be visible on lockscreen
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
-			builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-		}
+		builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
 		//Set SmallIcon
 		boolean usePlayingIcon = this.infos.notificationIcon.isEmpty();
@@ -249,7 +251,12 @@ public class MusicControlsNotification {
 		Intent resultIntent = new Intent(context, cordovaActivity.getClass());
 		resultIntent.setAction(Intent.ACTION_MAIN);
 		resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-		PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, 0);
+		PendingIntent resultPendingIntent;
+		if (Build.VERSION.SDK_INT >= 31) {
+			resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_MUTABLE);
+		} else {
+			resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, 0);
+		}
 		builder.setContentIntent(resultPendingIntent);
 
 		//Controls
@@ -258,47 +265,71 @@ public class MusicControlsNotification {
 		if (this.infos.hasPrev){
 			nbControls++;
 			Intent previousIntent = new Intent("music-controls-previous");
-			PendingIntent previousPendingIntent = PendingIntent.getBroadcast(context, 1, previousIntent, 0);
+			PendingIntent previousPendingIntent;
+			if (Build.VERSION.SDK_INT >= 31) {
+				previousPendingIntent = PendingIntent.getBroadcast(context, 1, previousIntent, PendingIntent.FLAG_MUTABLE);
+			} else {
+				previousPendingIntent = PendingIntent.getBroadcast(context, 1, previousIntent, 0);
+			}
 			builder.addAction(createAction(this.infos.prevIcon, R.drawable.cmc_skip_previous, previousPendingIntent));
 		}
 		if (this.infos.isPlaying){
 			/* Pause  */
 			nbControls++;
 			Intent pauseIntent = new Intent("music-controls-pause");
-			PendingIntent pausePendingIntent = PendingIntent.getBroadcast(context, 1, pauseIntent, 0);
+			PendingIntent pausePendingIntent;
+			if (Build.VERSION.SDK_INT >= 31) {
+				pausePendingIntent = PendingIntent.getBroadcast(context, 1, pauseIntent, PendingIntent.FLAG_MUTABLE);
+			} else {
+				pausePendingIntent = PendingIntent.getBroadcast(context, 1, pauseIntent, 0);
+			}
 			builder.addAction(createAction(this.infos.pauseIcon, R.drawable.cmc_pause, pausePendingIntent));
 		} else {
 			/* Play  */
 			nbControls++;
 			Intent playIntent = new Intent("music-controls-play");
-			PendingIntent playPendingIntent = PendingIntent.getBroadcast(context, 1, playIntent, 0);
+			PendingIntent playPendingIntent;
+			if (Build.VERSION.SDK_INT >= 31) {
+				playPendingIntent = PendingIntent.getBroadcast(context, 1, playIntent, PendingIntent.FLAG_MUTABLE);
+			} else {
+				playPendingIntent = PendingIntent.getBroadcast(context, 1, playIntent, 0);
+			}
 			builder.addAction(createAction(this.infos.playIcon, R.drawable.cmc_play, playPendingIntent));
 		}
 		/* Next */
 		if (this.infos.hasNext){
 			nbControls++;
 			Intent nextIntent = new Intent("music-controls-next");
-			PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context, 1, nextIntent, 0);
+			PendingIntent nextPendingIntent;
+			if (Build.VERSION.SDK_INT >= 31) {
+				nextPendingIntent = PendingIntent.getBroadcast(context, 1, nextIntent, PendingIntent.FLAG_MUTABLE);
+			} else {
+				nextPendingIntent = PendingIntent.getBroadcast(context, 1, nextIntent, 0);
+			}
 			builder.addAction(createAction(this.infos.nextIcon, R.drawable.cmc_skip_next, nextPendingIntent));
 		}
 		/* Close */
 		if (this.infos.hasClose){
 			nbControls++;
 			Intent destroyIntent = new Intent("music-controls-destroy");
-			PendingIntent destroyPendingIntent = PendingIntent.getBroadcast(context, 1, destroyIntent, 0);
+			PendingIntent destroyPendingIntent;
+			if (Build.VERSION.SDK_INT >= 31) {
+				destroyPendingIntent = PendingIntent.getBroadcast(context, 1, destroyIntent, PendingIntent.FLAG_MUTABLE);
+			} else {
+				destroyPendingIntent = PendingIntent.getBroadcast(context, 1, destroyIntent, 0);
+			}
 			builder.addAction(createAction(this.infos.closeIcon, R.drawable.cmc_stop, destroyPendingIntent));
 		}
 
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
-			int[] args = new int[nbControls];
-			for (int i = 0; i < nbControls; ++i) {
-				args[i] = i;
-			}
-			androidx.media.app.NotificationCompat.MediaStyle  mediaStyle = new androidx.media.app.NotificationCompat.MediaStyle();
-			mediaStyle.setMediaSession(this.token);
-			mediaStyle.setShowActionsInCompactView(args);
-			builder.setStyle(mediaStyle);
+
+		int[] args = new int[nbControls];
+		for (int i = 0; i < nbControls; ++i) {
+			args[i] = i;
 		}
+		androidx.media.app.NotificationCompat.MediaStyle  mediaStyle = new androidx.media.app.NotificationCompat.MediaStyle();
+		mediaStyle.setMediaSession(this.token);
+		mediaStyle.setShowActionsInCompactView(args);
+		builder.setStyle(mediaStyle);
 
 		//If 8.0 >= use colors
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
