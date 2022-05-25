@@ -53,7 +53,29 @@ public class CapacitorMusicControls extends Plugin {
 
 	@Override
 	protected void handleOnDestroy() {
-		destroyPlayerNotification();
+		final Activity activity = getActivity();
+		final Context context=activity.getApplicationContext();
+
+		this.destroyPlayerNotification();
+
+		try {
+
+			context.unregisterReceiver(this.mMessageReceiver);
+
+			this.mediaSessionCompat.setActive(false);
+			this.mediaSessionCompat.setMetadata(null);
+			this.mediaSessionCompat.setPlaybackState(null);
+
+			this.mMessageReceiver = null;
+			this.notification = null;
+			this.mediaSessionCompat = null;
+			this.mediaButtonPendingIntent = null;
+			this.mMediaSessionCallback = null;
+
+		} catch(IllegalArgumentException e) {
+		}
+
+		this.unregisterMediaButtonEvent();
 	}
 
 	@PluginMethod()
