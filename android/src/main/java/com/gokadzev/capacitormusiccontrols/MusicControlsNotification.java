@@ -285,16 +285,16 @@ public class MusicControlsNotification {
 			builder.addAction(createAction(this.infos.closeIcon, R.drawable.cmc_stop, destroyPendingIntent));
 		}
 
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
-			int[] args = new int[nbControls];
-			for (int i = 0; i < nbControls; ++i) {
-				args[i] = i;
-			}
-			androidx.media.app.NotificationCompat.MediaStyle  mediaStyle = new androidx.media.app.NotificationCompat.MediaStyle();
-			mediaStyle.setMediaSession(this.token);
-			mediaStyle.setShowActionsInCompactView(args);
-			builder.setStyle(mediaStyle);
+
+		int[] args = new int[nbControls];
+		for (int i = 0; i < nbControls; ++i) {
+			args[i] = i;
 		}
+		androidx.media.app.NotificationCompat.MediaStyle  mediaStyle = new androidx.media.app.NotificationCompat.MediaStyle();
+		mediaStyle.setMediaSession(this.token);
+		mediaStyle.setShowActionsInCompactView(args);
+		builder.setStyle(mediaStyle);
+
 
 		//If 8.0 >= use colors
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
