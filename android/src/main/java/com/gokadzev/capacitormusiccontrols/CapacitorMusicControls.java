@@ -51,6 +51,11 @@ public class CapacitorMusicControls extends Plugin {
 		call.resolve();
 	}
 
+	@Override
+	protected void handleOnDestroy() {
+		destroyPlayerNotification();
+	}
+
 	@PluginMethod()
 	public void destroy(PluginCall call) {
 		final Activity activity = getActivity();
