@@ -19,8 +19,9 @@ export class CapacitorMusicControlsWeb extends WebPlugin {
     updateElapsed(args) {
         console.log('updateElapsed', args);
     }
-    updateIsPlaying(isPlaying) {
-        console.log('updateIsPlaying', isPlaying);
+    updateIsPlaying(opts) {
+        console.log('updateIsPlaying', opts);
+        return Promise.resolve();
     }
 }
 //# sourceMappingURL=web.js.map

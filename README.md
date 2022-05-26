@@ -134,12 +134,17 @@ CapacitorMusicControls.create({
 
 //Update only playing status
 
-CapacitorMusicControls.updateIsPlaying(true).then(()=>{
+CapacitorMusicControls.updateIsPlaying({ isPlaying: true }).then(()=>{
 	// TODO
 })
 .catch(e=>{
 	console.log(e);
 });
+
+//or just
+ 
+CapacitorMusicControls.updateIsPlaying({ isPlaying: true });
+
 
 //Update as playing status as elapsed time
 

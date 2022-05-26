@@ -107,6 +107,29 @@ public class CapacitorMusicControls extends Plugin {
 	}
 
 	@PluginMethod()
+	public void updateIsPlaying(PluginCall call) {
+		JSObject options = call.getData();
+
+		try{
+			final boolean isPlaying = options.getBoolean("isPlaying");
+			this.notification.updateIsPlaying(isPlaying);
+
+			if(isPlaying)
+				setMediaPlaybackStateNew(PlaybackStateCompat.STATE_PLAYING);
+			else
+				setMediaPlaybackStateNew(PlaybackStateCompat.STATE_PAUSED);
+
+			call.resolve();
+		} catch(JSONException e){
+			System.out.println("toString(): "  + e.toString());
+			System.out.println("getMessage(): " + e.getMessage());
+			System.out.println("StackTrace: ");
+			e.printStackTrace();
+			call.reject("error in updateIsPlaying");
+		}
+	}
+
+	@PluginMethod()
 	public void updateState(PluginCall call) {
 		JSObject params = call.getData();
 
@@ -230,24 +253,41 @@ public class CapacitorMusicControls extends Plugin {
 		if( state == PlaybackStateCompat.STATE_PLAYING ) {
 			playbackstateBuilder.setActions(
 					PlaybackStateCompat.ACTION_PLAY_PAUSE |
-					PlaybackStateCompat.ACTION_PAUSE |
-					PlaybackStateCompat.ACTION_SKIP_TO_NEXT |
-					PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
-					PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID |
-					PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH
-					);
+							PlaybackStateCompat.ACTION_PAUSE |
+							PlaybackStateCompat.ACTION_SKIP_TO_NEXT |
+							PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+							PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID |
+							PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH
+			);
 			playbackstateBuilder.setState(state, elapsed, 1.0f, SystemClock.elapsedRealtime());
 		} else {
 			playbackstateBuilder.setActions(
 					PlaybackStateCompat.ACTION_PLAY_PAUSE |
-					PlaybackStateCompat.ACTION_PLAY |
-					PlaybackStateCompat.ACTION_SKIP_TO_NEXT |
-					PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
-					PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID |
-					PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH
-					);
+							PlaybackStateCompat.ACTION_PLAY |
+							PlaybackStateCompat.ACTION_SKIP_TO_NEXT |
+							PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+							PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID |
+							PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH
+			);
 			playbackstateBuilder.setState(state, elapsed, 0, SystemClock.elapsedRealtime());
 		}
 		this.mediaSessionCompat.setPlaybackState(playbackstateBuilder.build());
 	}
+
+	private void setMediaPlaybackStateNew(int state) {
+		PlaybackStateCompat.Builder playbackstateBuilder = new PlaybackStateCompat.Builder();
+		if( state == PlaybackStateCompat.STATE_PLAYING ) {
+			playbackstateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+					PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID |
+					PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH);
+			playbackstateBuilder.setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+		} else {
+			playbackstateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+					PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID |
+					PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH);
+			playbackstateBuilder.setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 0);
+		}
+		this.mediaSessionCompat.setPlaybackState(playbackstateBuilder.build());
+	}
+	
 }
