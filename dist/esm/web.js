@@ -16,7 +16,7 @@ export class CapacitorMusicControlsWeb extends WebPlugin {
     updateDismissable(dismissable) {
         console.log('updateDismissable', dismissable);
     }
-    updateElapsed(args) {
+    updateState(args) {
         console.log('updateElapsed', args);
     }
     updateIsPlaying(opts) {

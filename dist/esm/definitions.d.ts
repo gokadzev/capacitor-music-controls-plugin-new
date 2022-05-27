@@ -52,7 +52,7 @@ export interface CapacitorMusicControlsPlugin {
      * Update elapsed time, optionally toggle play/pause:
      * @param opts {Object}
      */
-    updateElapsed(opts: {
+    updateState(opts: {
         elapsed: number;
         isPlaying: boolean;
     }): void;

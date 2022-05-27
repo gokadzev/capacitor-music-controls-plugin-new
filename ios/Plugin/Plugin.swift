@@ -100,7 +100,7 @@ public class CapacitorMusicControls: CAPPlugin {
 
     }
     
-    @objc func updateElapsed(_ call: CAPPluginCall) {
+    @objc func updateState(_ call: CAPPluginCall) {
         
          self.updateIsPlaying(call);
          

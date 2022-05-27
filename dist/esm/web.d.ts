@@ -5,7 +5,7 @@ export declare class CapacitorMusicControlsWeb extends WebPlugin implements Capa
     create(options: CapacitorMusicControlsInfo): Promise<any>;
     destroy(): Promise<any>;
     updateDismissable(dismissable: boolean): void;
-    updateElapsed(args: {
+    updateState(args: {
         elapsed: number;
         isPlaying: boolean;
     }): void;

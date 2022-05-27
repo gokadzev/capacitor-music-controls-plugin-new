@@ -148,7 +148,7 @@ CapacitorMusicControls.updateIsPlaying({ isPlaying: true });
 
 //Update as playing status as elapsed time
 
-CapacitorMusicControls.updateElapsed({
+CapacitorMusicControls.updateState({
 	elapsed: timeElapsed, // affects iOS Only
 	isPlaying: true // affects Android only
 }).then(()=>{
