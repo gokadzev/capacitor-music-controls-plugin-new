@@ -94,7 +94,7 @@ CapacitorMusicControls.create({
 	hasClose  : true,		// show close button, optional, default: false
 
 
-	duration : 0, // required
+	duration : 0, // (in seconds) required
 
 
 	// iOS only, optional
@@ -234,9 +234,6 @@ function handleControlsEvent(action) {
 
 Original plugin by:
 wako-app (https://github.com/wako-app/)
-
-Documentation influenced by:
-ghenry22 (https://github.com/ghenry22)
 
 Contributors: 
 

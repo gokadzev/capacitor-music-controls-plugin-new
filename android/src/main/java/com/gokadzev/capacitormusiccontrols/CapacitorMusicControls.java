@@ -135,7 +135,7 @@ public class CapacitorMusicControls extends Plugin {
 
 		try {
 			final boolean isPlaying = params.getBoolean("isPlaying");
-			final long elapsed = params.getLong("elapsed");
+			final long elapsed = (params.getLong("elapsed") * 1000);;
 			this.notification.updateIsPlaying(isPlaying);
 
 			if(isPlaying)
@@ -226,7 +226,7 @@ public class CapacitorMusicControls extends Plugin {
 			metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, infos.track);
 			metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, infos.artist);
 			metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, infos.album);
-			metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, infos.duration);
+			metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, infos.duration * 1000);
 			this.mediaSessionCompat.setMetadata(metadataBuilder.build());
 
 			this.mediaSessionCompat.setActive(true);
