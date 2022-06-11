@@ -172,7 +172,7 @@ public class CapacitorMusicControls: CAPPlugin {
 
  
             if(urlPath != nil && defaultManager.fileExists(atPath: urlPath!)){
-                coverImage = UIImage(contentsOfFile: urlPath!)!
+                coverImage = UIImage(contentsOfFile: urlPath!) ?? UIImage();
             } else {
                 coverImage = nil;
             }
