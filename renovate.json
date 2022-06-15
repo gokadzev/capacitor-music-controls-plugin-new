@@ -1,5 +1,14 @@
 {
   "extends": [
     "config:base"
+  ],
+  {
+  "packageRules": [
+    {
+      "matchPackageNames": ["request"],
+      "matchLanguages": ["gradle","gradle-wrapper","cocoapods"],
+      "enabled": false
+    }
   ]
+}
 }
