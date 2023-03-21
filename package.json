@@ -17,9 +17,9 @@
   },
   "devDependencies": {
     "typescript": "4.3.2",
-    "@capacitor/android": "4.0.1",
-    "@capacitor/cli": "4.0.1",
-    "@capacitor/ios": "4.0.1"
+    "@capacitor/android": "4.0.0",
+    "@capacitor/cli": "4.0.0",
+    "@capacitor/ios": "4.0.0"
   },
   "files": [
     "dist/",
