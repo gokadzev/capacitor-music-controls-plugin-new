@@ -4,34 +4,63 @@
   "description": "Implementation of MusicControls for Capacitor projects",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
-  "scripts": {
-    "build": "npm run clean && tsc",
-    "clean": "rm -rf ./dist",
-    "watch": "tsc --watch",
-    "prepublishOnly": "npm run build"
-  },
-  "author": "gokadzev",
-  "license": "MIT",
-  "dependencies": {
-    "@capacitor/core": "^4.0.0"
-  },
-  "devDependencies": {
-    "typescript": "4.3.2",
-    "@capacitor/android": "4.0.0",
-    "@capacitor/cli": "4.0.0",
-    "@capacitor/ios": "4.0.0"
-  },
   "files": [
     "dist/",
     "ios/",
     "android/",
     "CapacitorMusicControlsPluginNew.podspec"
   ],
+  "author": "gokadzev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gokadzev/capacitor-music-controls-plugin-new"
+  },
+  "bugs": {
+    "url": "https://github.com/gokadzev/capacitor-music-controls-plugin-new/issues"
+  },
   "keywords": [
     "capacitor",
     "plugin",
     "native"
   ],
+  "scripts": {
+    "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
+    "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ..",
+    "verify:android": "cd android && ./gradlew clean build test && cd ..",
+    "build": "npm run clean && tsc",
+    "clean": "rm -rf ./dist",
+    "watch": "tsc --watch",
+    "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
+    "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
+    "eslint": "eslint . --ext ts",
+    "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
+    "swiftlint": "node-swiftlint",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^4.0.0",
+    "@capacitor/cli": "^4.0.0",
+    "@capacitor/ios": "^4.0.0",
+    "@ionic/eslint-config": "^0.3.0",
+    "@ionic/prettier-config": "^1.0.1",
+    "@ionic/swiftlint-config": "^1.1.2",
+    "eslint": "^7.11.0",
+    "prettier": "~2.3.0",
+    "prettier-plugin-java": "~1.0.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.32.0",
+    "swiftlint": "^1.0.1",
+    "typescript": "^4.3.2"
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^4.0.0"
+  },
+  "prettier": "@ionic/prettier-config",
+  "swiftlint": "@ionic/swiftlint-config",
+  "eslintConfig": {
+    "extends": "@ionic/eslint-config/recommended"
+  },
   "capacitor": {
     "ios": {
       "src": "ios"
@@ -39,12 +68,5 @@
     "android": {
       "src": "android"
     }
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gokadzev/capacitor-music-controls-plugin-new"
-  },
-  "bugs": {
-    "url": "https://github.com/gokadzev/capacitor-music-controls-plugin-new/issues"
   }
 }
