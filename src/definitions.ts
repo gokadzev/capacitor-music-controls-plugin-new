@@ -27,6 +27,10 @@ export interface CapacitorMusicControlsInfo {
   iconsColor?: number;
 }
 
+export interface PermissionStatus {
+  notifications: 'granted' | 'denied' | 'prompt';
+}
+
 export interface CapacitorMusicControlsPlugin {
   /**
    * Create the media controls
@@ -40,6 +44,18 @@ export interface CapacitorMusicControlsPlugin {
    * @returns {Promise<any>}
    */
   destroy(): Promise<any>;
+
+  /**
+   * Check permissions status
+   * @returns {Promise<PermissionStatus>}
+   */
+  checkPermissions(): Promise<PermissionStatus>;
+
+  /**
+   * Request necessary permissions (Android 13+)
+   * @returns {Promise<PermissionStatus>}
+   */
+  requestPermissions(): Promise<PermissionStatus>;
 
   /**
    * Subscribe to the events of the media controller
@@ -71,5 +87,5 @@ export interface CapacitorMusicControlsPlugin {
   addListener(
     event: string,
     callback: (info: any) => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 }

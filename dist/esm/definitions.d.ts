@@ -1,4 +1,4 @@
-import { PluginListenerHandle } from "@capacitor/core";
+import type { PluginListenerHandle } from '@capacitor/core';
 export interface CapacitorMusicControlsInfo {
     track?: string;
     artist?: string;
@@ -25,6 +25,9 @@ export interface CapacitorMusicControlsInfo {
     notificationIcon?: string;
     iconsColor?: number;
 }
+export interface PermissionStatus {
+    notifications: 'granted' | 'denied' | 'prompt';
+}
 export interface CapacitorMusicControlsPlugin {
     /**
      * Create the media controls
@@ -38,11 +41,21 @@ export interface CapacitorMusicControlsPlugin {
      */
     destroy(): Promise<any>;
     /**
+     * Check permissions status
+     * @returns {Promise<PermissionStatus>}
+     */
+    checkPermissions(): Promise<PermissionStatus>;
+    /**
+     * Request necessary permissions (Android 13+)
+     * @returns {Promise<PermissionStatus>}
+     */
+    requestPermissions(): Promise<PermissionStatus>;
+    /**
      * Subscribe to the events of the media controller
      * @returns {Observable<any>}
      */
     /**
-    * Toggle play/pause:
+     * Toggle play/pause:
      * @param opts {Object}
      */
     updateIsPlaying(opts: {
@@ -61,5 +74,5 @@ export interface CapacitorMusicControlsPlugin {
      * @param dismissable {boolean}
      */
     updateDismissable(dismissable: boolean): void;
-    addListener(event: string, callback: (info: any) => void): PluginListenerHandle;
+    addListener(event: string, callback: (info: any) => void): Promise<PluginListenerHandle>;
 }

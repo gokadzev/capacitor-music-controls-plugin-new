@@ -38,6 +38,31 @@ public class MusicControlsNotification {
 
     public WeakReference<CMCNotifyKiller> killer_service;
 
+    // Helper method to create PendingIntent with proper flags for different Android versions
+    private PendingIntent createPendingIntent(Context context, int requestCode, Intent intent, boolean isMutable) {
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isMutable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                flags |= PendingIntent.FLAG_MUTABLE;
+            } else {
+                flags |= PendingIntent.FLAG_IMMUTABLE;
+            }
+        }
+        
+        return PendingIntent.getBroadcast(context, requestCode, intent, flags);
+    }
+    
+    private PendingIntent createActivityPendingIntent(Context context, int requestCode, Intent intent) {
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+        
+        return PendingIntent.getActivity(context, requestCode, intent, flags);
+    }
+
     // Public Constructor
     public MusicControlsNotification(Activity cordovaActivity, int id, MediaSessionCompat.Token token) {
         this.CHANNEL_ID = "capacitor-music-channel-id";
@@ -197,13 +222,7 @@ public class MusicControlsNotification {
         if (this.infos.dismissable) {
             builder.setOngoing(false);
             Intent dismissIntent = new Intent("music-controls-destroy");
-            PendingIntent dismissPendingIntent;
-            if (Build.VERSION.SDK_INT >= 23) {
-                dismissPendingIntent = PendingIntent.getBroadcast(context, 1, dismissIntent, PendingIntent.FLAG_IMMUTABLE);
-            } else {
-                dismissPendingIntent = PendingIntent.getBroadcast(context, 1, dismissIntent, 0);
-            }
-
+            PendingIntent dismissPendingIntent = createPendingIntent(context, 1, dismissIntent, false);
             builder.setDeleteIntent(dismissPendingIntent);
         } else {
             builder.setOngoing(true);
@@ -242,12 +261,7 @@ public class MusicControlsNotification {
         Intent resultIntent = new Intent(context, cordovaActivity.getClass());
         resultIntent.setAction(Intent.ACTION_MAIN);
         resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        PendingIntent resultPendingIntent;
-        if (Build.VERSION.SDK_INT >= 31) {
-            resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_MUTABLE);
-        } else {
-            resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, 0);
-        }
+        PendingIntent resultPendingIntent = createActivityPendingIntent(context, 0, resultIntent);
         builder.setContentIntent(resultPendingIntent);
 
         //Controls
@@ -256,59 +270,34 @@ public class MusicControlsNotification {
         if (this.infos.hasPrev) {
             nbControls++;
             Intent previousIntent = new Intent("music-controls-previous");
-            PendingIntent previousPendingIntent;
-            if (Build.VERSION.SDK_INT >= 31) {
-                previousPendingIntent = PendingIntent.getBroadcast(context, 1, previousIntent, PendingIntent.FLAG_MUTABLE);
-            } else {
-                previousPendingIntent = PendingIntent.getBroadcast(context, 1, previousIntent, 0);
-            }
+            PendingIntent previousPendingIntent = createPendingIntent(context, 1, previousIntent, false);
             builder.addAction(createAction(this.infos.prevIcon, R.drawable.cmc_skip_previous, previousPendingIntent));
         }
         if (this.infos.isPlaying) {
             /* Pause  */
             nbControls++;
             Intent pauseIntent = new Intent("music-controls-pause");
-            PendingIntent pausePendingIntent;
-            if (Build.VERSION.SDK_INT >= 31) {
-                pausePendingIntent = PendingIntent.getBroadcast(context, 1, pauseIntent, PendingIntent.FLAG_MUTABLE);
-            } else {
-                pausePendingIntent = PendingIntent.getBroadcast(context, 1, pauseIntent, 0);
-            }
+            PendingIntent pausePendingIntent = createPendingIntent(context, 2, pauseIntent, false);
             builder.addAction(createAction(this.infos.pauseIcon, R.drawable.cmc_pause, pausePendingIntent));
         } else {
             /* Play  */
             nbControls++;
             Intent playIntent = new Intent("music-controls-play");
-            PendingIntent playPendingIntent;
-            if (Build.VERSION.SDK_INT >= 31) {
-                playPendingIntent = PendingIntent.getBroadcast(context, 1, playIntent, PendingIntent.FLAG_MUTABLE);
-            } else {
-                playPendingIntent = PendingIntent.getBroadcast(context, 1, playIntent, 0);
-            }
+            PendingIntent playPendingIntent = createPendingIntent(context, 2, playIntent, false);
             builder.addAction(createAction(this.infos.playIcon, R.drawable.cmc_play, playPendingIntent));
         }
         /* Next */
         if (this.infos.hasNext) {
             nbControls++;
             Intent nextIntent = new Intent("music-controls-next");
-            PendingIntent nextPendingIntent;
-            if (Build.VERSION.SDK_INT >= 31) {
-                nextPendingIntent = PendingIntent.getBroadcast(context, 1, nextIntent, PendingIntent.FLAG_MUTABLE);
-            } else {
-                nextPendingIntent = PendingIntent.getBroadcast(context, 1, nextIntent, 0);
-            }
+            PendingIntent nextPendingIntent = createPendingIntent(context, 3, nextIntent, false);
             builder.addAction(createAction(this.infos.nextIcon, R.drawable.cmc_skip_next, nextPendingIntent));
         }
         /* Close */
         if (this.infos.hasClose) {
             nbControls++;
             Intent destroyIntent = new Intent("music-controls-destroy");
-            PendingIntent destroyPendingIntent;
-            if (Build.VERSION.SDK_INT >= 31) {
-                destroyPendingIntent = PendingIntent.getBroadcast(context, 1, destroyIntent, PendingIntent.FLAG_MUTABLE);
-            } else {
-                destroyPendingIntent = PendingIntent.getBroadcast(context, 1, destroyIntent, 0);
-            }
+            PendingIntent destroyPendingIntent = createPendingIntent(context, 4, destroyIntent, false);
             builder.addAction(createAction(this.infos.closeIcon, R.drawable.cmc_stop, destroyPendingIntent));
         }
 

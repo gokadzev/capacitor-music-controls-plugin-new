@@ -1,10 +1,16 @@
 
   <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.gokadzev.capacitormusiccontrols.capacitormusiccontrolsplugin">
+      >
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    
     <application>
-      <service android:name="com.gokadzev.capacitormusiccontrols.CMCNotifyKiller" />
+      <service android:name="com.gokadzev.capacitormusiccontrols.CMCNotifyKiller" 
+               android:foregroundServiceType="mediaPlayback"
+               android:exported="false" />
     </application>
   </manifest>
   

@@ -83,7 +83,18 @@ public class CMCNotifyKiller extends Service {
     private void keepAwake(boolean do_wakelock) {
         if (notification != null && notification.get() != null && !foregroundStarted) {
             Log.i(TAG, "Starting ForegroundService");
-            startForeground(this.NOTIFICATION_ID, notification.get());
+            
+            // For Android 14+ (API 34+), specify the foreground service type
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                try {
+                    startForeground(this.NOTIFICATION_ID, notification.get(), android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to start foreground service with media playback type", e);
+                    startForeground(this.NOTIFICATION_ID, notification.get());
+                }
+            } else {
+                startForeground(this.NOTIFICATION_ID, notification.get());
+            }
             foregroundStarted = true;
         }
 
